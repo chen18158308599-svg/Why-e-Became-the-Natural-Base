@@ -1,0 +1,308 @@
+---
+title: "A Long Journey of Continuity"
+jupyter: python3
+---
+
+::: {.callout-note}
+## Group Information
+
+**Group:** Feline Squad  
+**Authors:** Lim Tau Shean, Kaya Lim Shi Qek, Telur Lim Shi Hui, Kopi Lim Shi Fey
+
+<div style="text-align: center;">
+![Feline Squad](asset/feline_squad.jpeg){width="250"}
+</div>
+
+:::
+
+# Continuity in high school days
+
+_Continuity_ is a long-standing concept that anyone who spends enough time in mathematics will encounter repeatedly. Back in high school, most of the functions we worked with—single-variable ones like polynomials, exponentials, and trigonometric functions—were continuous, at least on most of their domains. Rational functions such as $f(x) = \frac{1}{x - a}$ are also continuous almost everywhere, except at points where the expression is not defined, that is, where the denominator becomes zero.
+
+In high school, the so-called "definition" of continuity is usually introduced in a very pictorial way. A function $f$ is said to be continuous if, when sketching its graph, one can draw it without lifting the pen from the paper.
+It is a remarkably intuitive idea—almost so intuitive that it feels suspiciously informal for something that later becomes a central concept in rigorous analysis. In fact, at that stage, continuity is less a definition than a drawing rule: if your curve has no visible breaks, jumps, or sudden teleportations, then it is declared continuous. No *limits*, no *$\epsilon$–$\delta$*, just a pen and a steady hand.
+
+<div style="display: flex; justify-content: center;">
+```{python}
+#| echo: false
+import plotly.graph_objects as go
+import numpy as np
+
+x = np.linspace(-2, 2, 500)
+
+# Create the figure
+fig = go.Figure()
+
+# Add x²
+fig.add_trace(go.Scatter(
+    x=x, 
+    y=x**2, 
+    mode="lines",
+    name="x²",
+    line=dict(color='black', width=3)
+))
+
+# Add sin(x)
+fig.add_trace(go.Scatter(
+    x=x, 
+    y=np.sin(x), 
+    mode="lines",
+    name="sin(x)",
+    line=dict(color='blue', width=2)
+))
+
+# Add cos(x)
+fig.add_trace(go.Scatter(
+    x=x, 
+    y=np.cos(x), 
+    mode="lines",
+    name="cos(x)",
+    line=dict(color='red', width=2)
+))
+
+# Add e^x
+fig.add_trace(go.Scatter(
+    x=x, 
+    y=np.exp(x), 
+    mode="lines",
+    name="eˣ",
+    line=dict(color='green', width=2)
+))
+
+# Add a constant function
+fig.add_trace(go.Scatter(
+    x=x, 
+    y=[1]*len(x), 
+    mode="lines",
+    name="y = 1",
+    line=dict(color='purple', width=2, dash='dash')
+))
+
+# Add the x-axis line (y=0)
+fig.add_trace(go.Scatter(
+    x=x, 
+    y=[0]*len(x), 
+    mode="lines",
+    name="x-axis",
+    line=dict(color='black', width=1, dash='solid'),
+    showlegend=False
+))
+
+# Add the y-axis line (x=0)
+fig.add_trace(go.Scatter(
+    x=[0, 0], 
+    y=[-4, 8], 
+    mode="lines",
+    name="y-axis",
+    line=dict(color='black', width=1, dash='solid'),
+    showlegend=False
+))
+
+# Update layout
+fig.update_layout(
+    title="Some Beautiful Continuous Functions",
+    xaxis_title="x",
+    yaxis_title="y",
+    template="plotly_white",
+    width=450,
+    height=350,
+    legend=dict(
+        yanchor="top",
+        y=0.99,
+        xanchor="left",
+        x=0.01,
+        bgcolor="rgba(255, 255, 255, 0.8)"
+    ),
+    dragmode="zoom",
+    hovermode="x unified"
+)
+
+# Set axis ranges
+fig.update_yaxes(range=[-2, 8], zeroline=False)
+fig.update_xaxes(range=[-2, 2], zeroline=False)
+
+# Add grid
+fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='LightGray')
+fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='LightGray')
+
+# Add note about zooming
+fig.add_annotation(
+    text="💡 Tip: Click and drag to zoom. Double-click to reset view.",
+    xref="paper", yref="paper",
+    x=0.5, y=-0.15,
+    showarrow=False,
+    font=dict(size=10, color="gray")
+)
+
+fig.show()
+```
+</div>
+
+# Manufacturing discontinuity 
+
+Most of the functions one encounters in the early stages of a mathematical career are continuous, unless the expression becomes ill-defined — like the absurdity of "1 over 0" or $\ln(0)$. These are not true discontinuities in the mathematical sense; rather, the function simply fails to exist at those points.
+
+In fact, to construct a genuine discontinuity — a jump, break, or gap that occurs even where the function is defined — one must turn to more *manufactured* functions. Unlike the natural, elementary functions (polynomials, exponentials, trigonometric functions, and their combinations), which flow smoothly without interruption across their entire domains, a discontinuity requires forcefully "gluing" two unrelated functions together at a single point to handcraft such a case.
+
+One classical example is the **Heaviside step function**, named after the English mathematician and electrical engineer Oliver Heaviside (not because it is "heavy on one side," though that is a surprisingly intuitive way to remember it — I certainly thought so at first!):
+
+$$
+H(x) = \begin{cases} 
+0 & \text{if } x < 0, \\
+1 & \text{if } x \ge 0 .
+\end{cases}
+$$
+What makes this "manufactured" is the deliberate choice to define the function differently on two sides of a point. In nature (or at least in the world of elementary functions), such behavior almost never appears. But in mathematics, we have the freedom to break the rules — and in doing so, we uncover deeper truths about what continuity really means.
+
+Using this "forcefully gluing" technique, we can now "mass-produce" all sorts of discontinuous functions. Here is an even more bizarre example. The **Dirichlet function**, named after the German mathematician _Peter Gustav Lejeune Dirichlet_, is defined as:
+
+$$
+D(x) = \begin{cases} 
+1 & \text{if } x \text{ is rational}, \\
+0 & \text{if } x \text{ is irrational}.
+\end{cases}
+$$
+
+This function is *crazy*! It is discontinuous **everywhere**. Why? Because between any two rational numbers, there exists an irrational, and between any two irrationals, there exists a rational. The rationals and irrationals are densely interwoven — no matter how small an interval you choose, the function frantically jumps between 0 and 1 infinitely many times. Its graph is a complete mess — no two points sit next to each other in any coherent way. You cannot draw it with a pen stroke. In fact, if you try to draw the graph (following the increasing order from 0 to 1), your pen will have to perform infinitely many jumps. No human on Earth can do that! Cats, maybe.
+
+# Continuity in the Early Development of Calculus
+
+The "no pen leaving paper" definition of continuity was widely accepted in the early days of calculus, I mean the ancient history of calculus. This definition — so simple that even my kindergarten niece can understand it — was the standard for generations of mathematicians. What is even more bizarre in the history of mathematics is this: a great deal of fancy, sophisticated concepts — derivatives, integrals, partial derivatives, and so on — along with their applications across number theory, geometry, partial differential equations, and probability, were quite fully developed *before* a more adult-like definition of continuity ever arrived.
+
+Mathematicians, despite having already built towering cathedrals of calculus — derivatives, integrals, differential equations, and their applications across physics, astronomy, and beyond — suddenly found themselves lining up to give their own definition of "continuity." It seemed, on the surface, a remarkably tiny piece of business. After all, they had already accomplished so much without a rigorous definition. Why fuss over such a small matter?
+
+Enter Leonhard Euler, the most prolific mathematician in history. His definition was simple and elegant: a continuous function is one that can be expressed by a single analytic formula — a polynomial, a power series, or a combination of elementary functions. If a function required piecewise definitions (like "this formula for $x < 0$, that formula for $x \ge 0$"), then it was, in Euler's eyes, not worth discussing. For example, the absolute value function 
+
+$$
+f(x) = |x| = \begin{cases} 
+-x & \text{if } x < 0, \\
+x & \text{if } x \ge 0 
+\end{cases}
+$$
+
+which, to the mathematics of today, is quite an elementary and perfectly continuous function, did not belong within Euler's universe of continuity. Actualy, if we write $|x|=\sqrt{x^2}$, the absolute value function may indeed express into elementary functions, provided that square-root function is elementary. For Euler, a man who sought absolute aesthetics within numbers and mathematics, the unity of expression was the very soul of continuity. No single formula meant no continuity. It was a definition that matched his intuition and, more importantly, worked beautifully for the functions he cared about.
+
+<div style="text-align: center;">
+![Leonhard Euler (1707-1783), portrait by Jakob Emanuel Handmann](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Leonhard_Euler_-_Jakob_Emanuel_Handmann_%28Kunstmuseum_Basel%29.jpg/500px-Leonhard_Euler_-_Jakob_Emanuel_Handmann_%28Kunstmuseum_Basel%29.jpg){width="300"}
+<br>
+*Figure: Leonhard Euler, portrait by Jakob Emanuel Handmann (1756). Kunstmuseum Basel.*
+</div>
+
+One major issue with Euler's definition of continuity is that it relies on the meaning of "elementary." What counts as elementary? Which functions are allowed, and which are not? The criterion seems vague at best and arbitrary at worst. More importantly, a good definition of "continuity" should not depend on any third-party verification. It should be a property of the function itself — not of the mathematician's cleverness in writing it down, nor of some external classification of which functions are "elementary" and which are not.
+
+Next into the game came _Bernard Bolzano_ and _Augustin-Louis Cauchy_, two figures whose fortunes in history could hardly be more different.
+
+Bolzano was a priest and a high school teacher in Prague, not a professor at a grand university. He worked in relative obscurity, publishing his insights on continuity in 1817 in a journal that few people read. His definition was remarkably clear: a function is continuous if a sufficiently small change in the input produces an arbitrarily small change in the output — essentially the modern intuition, though without the $\epsilon$–$\delta$ notation we use today. But Bolzano's work remained largely unknown to the wider mathematical world. He was ahead of his time, but obscurity is a cruel companion to genius.
+
+Cauchy, on the other hand, was a giant. A prolific French mathematician with a prestigious position at the École Polytechnique in Paris, he wrote influential textbooks — most notably the *Cours d'Analyse* (1821) — that would be read by generations of mathematicians across Europe. In that book, Cauchy offered his own definition, using the obscure notation of *infinitesimal quantity* that had long been used in calculus: an infinitesimal change $dx$ in the input produces an infinitesimal change $df$ in the output. For Cauchy, continuity was about the behavior of a function under infinitely small nudges.
+
+::: {style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; text-align: center;"}
+<div style="text-align: center;">
+**Bernard Bolzano**  
+(1781–1848)
+
+![Bernard Bolzano](https://thatsmaths.com/wp-content/uploads/2019/06/bernard-bolzano.jpg){width="250"}
+
+</div>
+<div style="text-align: center;">
+**Augustin-Louis Cauchy**  
+(1789–1857)
+
+![Augustin-Louis Cauchy](https://www.sapaviva.com/wp-content/uploads/2017/06/6S.-Augustin-Louis-Cauchy-1789-1857-440x440.jpg){width="250"}
+
+</div>
+:::
+
+<p style="text-align: center; margin-top: 20px;">
+*Figure: Bernard Bolzano (left) and Augustin-Louis Cauchy (right). Bolzano, a priest and high school teacher, gave the first rigorous definition of continuity in 1817, but his work remained obscure. Cauchy, a towering figure at the École Polytechnique in Paris, popularized a similar definition in his 1821 Cours d'Analyse, shaping the future of analysis.*
+</p>
+
+While Cauchy is often celebrated as the father of rigorous analysis, the historical truth is more delicate. The first *somewhat* accurate definition of continuity — the one that moves beyond intuition and toward logic — likely belongs to the quiet high school teacher from Prague. Bolzano got there first. Cauchy, however, got the microphone.
+
+Nonetheless, both definitions are still far from being "sound" by the mathematical standard of today. They suffer from a fundamental problem: what exactly does "small changes" or "infinitesimal changes" mean here? How small is "sufficiently small"? What is this mysterious *infinitesimal* quantity — is it zero? Is it not zero? Can it be divided? The definitions, for all their progress, still rest on vague, intuitive notions. They had moved the conversation forward, but they had not yet finished it.
+
+# Weierstrass and his $\epsilon$-$\delta$ Game
+
+The world of continuous functions went on without a proper definition until a low-profile genius came to the party — late, but not absent.
+
+_Karl Weierstrass_ spent the first half of his career as a high school teacher, isolated from the academic elite, scribbling mathematical breakthroughs by candlelight after long days of teaching botany and gymnastics. His rise to fame was sudden and deserved. But what truly cemented his legacy was not his late-blooming celebrity — it was his gift of precision. He is the father of modern analysis, but also the main culprit for why today's calculus classes are so difficult...
+
+<div style="text-align: center;">
+![Karl Weierstrass (1815-1897)](https://upload.wikimedia.org/wikipedia/commons/5/5b/Karl_Weierstrass_2.jpg){width="300"}
+<br>
+*Figure: Karl Weierstrass. A high school teacher who became a professor, he gave mathematics the $\epsilon$-$\delta$ definition of continuity and shocked the world with a function that is continuous everywhere but differentiable nowhere.*
+</div>
+
+Weierstrass looked at the definitions of Bolzano and Cauchy and saw a lingering ghost: the vague notion of "infinitesimal" or "small change." What does "small" mean? How small is small enough? Could mathematics, the language of absolute certainty, truly rest on such fuzzy ground? His answer was the **$\epsilon$-$\delta$ (epsilon-delta) definition** of continuity, which is now the sacred poem that every first-year analysis student must memorize. No more hand-waving. No more "infinitely small nudges." Instead, a precise, logical game:
+
+> A function $f$ is continuous at a point $a$ if, for every $\epsilon > 0$ (no matter how tiny), there exists some $\delta > 0$ such that whenever $|x - a| < \delta$, we have $|f(x) - f(a)| < \epsilon$.
+
+Here is how this $\epsilon$-$\delta$ game goes: Kaya, the challenger, throws down an $\epsilon > 0$ — a tolerance, an acceptable error in the output. Butter, the player, must respond with a $\delta > 0$ — a guarantee that if you stay within $\delta$ of the input, the output will stay within $\epsilon$ of the target. If Butter can do this for *every* $\epsilon$ that Kaya throws at her — no matter how absurdly small — then we can proclaim that the function passes the test. It is continuous!
+This is no more a definition about drawing pens in the kindergarten or obscure infinitesimals. It is a definition about *control*. It is a contract between challenge and response. And it works beautifully.
+
+The beauty of $\epsilon$-$\delta$ is that it avoids any mysterious quantities. Everything is a real number. Everything is an inequality. No infinitesimals. No ghosts. No hand-waving. For the first time in history, continuity had a definition that was purely logical, completely precise, and entirely independent of intuition. So without any reserve, I declare the day Weierstrass wrote down his $\epsilon$-$\delta$ definition to be the **Independence Day of Modern Analysis**. Mathematics had finally broken free from the chains of vague intuition and entered the age of rigor.
+
+# Beyond $\epsilon$-$\delta$ game -- metric spaces
+
+Weierstrass's $\epsilon$-$\delta$ definition of continuity has proven to be a resounding success, tested and verified as robust and bulletproof countless times throughout the history of mathematics. Another fascinating aspect of this definition is its remarkable extendability beyond single-variable functions. 
+
+From the definition above, one can see that by simply replacing the absolute value $| \cdot |$ with the Euclidean norm $\| \cdot \|$ in $\mathbb{R}^d$, the definition extends naturally to continuity for functions $f: \mathbb{R}^d \to \mathbb{R}^{d'}$ mapping between Euclidean spaces of any dimension. The core idea remains unchanged: a small change in the input (now measured by the norm) produces a small change in the output. The unsatisfying, but historically honest, remark is that it is difficult to say who first observed this extension. The credit likely belongs to Eduard Heine, a student of Weierstrass. But to be frank, I (someone lives in 2026) suspect anyone with a good sense of mathematics would see it easily. The leap from one dimension to many is, in hindsight, almost obvious — which is precisely why no one made a grand fuss about it.
+
+The $\epsilon$-$\delta$ game had conquered the real line and, with a simple tweak, the high-dimensional world of $\mathbb{R}^d$. But for a new generation of mathematicians, even this felt too specific. They began to ask: does the concept of distance have to be the familiar Euclidean one? Could we define continuity in spaces where the "points" are not coordinates, but things like functions or sequences?
+
+The answer came from **Maurice Fréchet**, who, in his 1906 doctoral thesis, took the decisive leap. Fréchet looked at the properties of Euclidean distance and asked: what makes it work? He extracted its essence—the rules that any distance function must follow—and used it to define an abstract **metric space**. Suddenly, the world of mathematics was filled with new, exotic spaces where the "distance" between two functions could be measured, and the $\epsilon$-$\delta$ game could be played all over again.
+
+A *metric* on a set $X$ is simply a function $d: X \times X \to \mathbb{R}$ that measures the distance between any two points. For it to behave like a reasonable notion of distance, it must satisfy four simple rules:
+
+1. **Non-negativity:** $d(x, y) \ge 0$ for all $x, y \in X$, and $d(x, y) = 0$ if and only if $x = y$.
+2. **Symmetry:** $d(x, y) = d(y, x)$ for all $x, y \in X$.
+3. **Triangle inequality:** $d(x, z) \le d(x, y) + d(y, z)$ for all $x, y, z \in X$.
+
+A set $X$ equipped with such a metric $d$ is called a **metric space** $(X, d)$. Familiar examples abound:
+
+- The real line $\mathbb{R}$ with $d(x, y) = |x - y|$.
+- Euclidean space $\mathbb{R}^d$ with $d(\mathbf{x}, \mathbf{y}) = \|\mathbf{x} - \mathbf{y}\|$.
+- Any set with the *discrete metric*: $d(x, y) = 0$ if $x = y$, and $d(x, y) = 1$ otherwise.
+
+Once we have a metric, the $\epsilon$-$\delta$ definition of continuity generalizes beautifully. Let $(X, d_X)$ and $(Y, d_Y)$ be two metric spaces. A function $f: X \to Y$ is **continuous at a point** $a \in X$ if:
+
+> For every $\epsilon > 0$, there exists $\delta > 0$ such that whenever $d_X(x, a) < \delta$, we have $d_Y(f(x), f(a)) < \epsilon$.
+
+That is it. The absolute values are simply replaced by the appropriate distance functions. The logical game remains exactly the same: challenge with $\epsilon$, respond with $\delta$, measure input distance using $d_X$, output distance using $d_Y$.
+
+If there were ever a need for a "Second Independence Day of Modern Analysis," it would undoubtedly be the day Fréchet introduced his notion of metric spaces. In modern analysis, it has become a trend to treat objects such as functions, matrices, or operators — none of which are typical numbers or vectors — as mere "points" in some abstract space, and then analyze convergence and continuity there. The notion of metric spaces provides a wonderful playground for analysts to study these problems.
+
+This abstraction is not merely a philosophical luxury. It has tangible consequences. By viewing a function as a point in a suitable metric space, one can ask: does a sequence of functions converge to some limit function? Is the map that sends a function to its derivative continuous? These questions lie at the heart of differential equations, calculus of variations, and even quantum mechanics, where the state of a physical system is represented as a vector (or a "point") in an infinite-dimensional Hilbert space — a special kind of metric space. 
+
+Fréchet's insight, in other words, was not just an elegant generalization. It was the key that unlocked the door to a vast new continent of mathematical inquiry.
+
+# Ultimate abstractization -- topological spaces
+
+Fréchet's metric spaces were a resounding success. They provided a new world where analysts could study functions, operators, and matrices as simple "points" in an abstract space. But one final, powerful question remained: Is a "metric" or a notion of distance truly necessary to talk about continuity?
+
+Perhaps continuity is a more fundamental idea than distance itself.
+
+The man who made the last transcendence of this journey was another genius, **Felix Hausdorff**. In his monumental 1914 book, *Grundzüge der Mengenlehre* (Fundamentals of Set Theory), he took the decisive leap. Hausdorff realized that to define continuity, you don't need to know *how far* points are apart. You only need to know, in a precise, logical — or rather, *set-theoretic* — way, which points are "near" each other. He captured this idea of "nearness" with the concept of a **neighbourhood**.
+
+He then used this to give the first formal definition of a **topological space**. The structure is defined not by a distance function, but by a collection of *open sets* that satisfy a few simple rules. Specifically, a topological space is a set $X$ together with a collection $\mathcal{T}$ of subsets of $X$ (called open sets) such that:
+
+1. The empty set $\emptyset$ and the whole set $X$ are both open.
+2. The union of any collection (finite or infinite) of open sets is open.
+3. The intersection of any *finite* collection of open sets is open.
+
+That is it. Three simple axioms. No distances. No metrics. No epsilon-delta games. Just sets and the rules they obey in the set theory language.
+
+
+In this new, breathtakingly abstract setting, the definition of continuity reaches its most elegant and general form. The complicated $\epsilon$-$\delta$ game disappears entirely, replaced by a single, beautiful condition:
+
+> A function $f$ between two topological spaces is **continuous** if, for every open set $V$ in the output space, its pre-image $f^{-1}(V)$ is an open set in the input space.
+
+This was probably the third "Independence Day" for a new generation. Finally, continuity was untethered from any notion of numbers, equations, or even distance. It had been elevated to a pure concept of structure, a cornerstone of modern mathematics, ready to be applied to anything from the shape of the universe to the properties of abstract data spaces.
+
+# Conclusion
+
+From kindergarten pens to Hausdorff's neighbourhoods, the journey of continuity mirrors the journey of mathematics itself: a gradual escape from intuition, a relentless pursuit of precision, and a willingness to ask "but what do we really mean by that?"
+
+Euler's formulas, Bolzano's obscurity, Cauchy's influence, Weierstrass's rigor, Fréchet's abstraction, Hausdorff's vision — each is a chapter in a story that is still being written. Because continuity, like all great mathematical ideas, is not finished. The next chapter belongs to you.
+
+So go ahead. Question your definitions. Challenge your intuitions. And the next time someone tells you what continuity *is*, ask them: "But what do you really mean by that?"
