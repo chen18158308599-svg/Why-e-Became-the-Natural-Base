@@ -4,7 +4,7 @@ subtitle: "Why e Became the Natural Base"
 number-sections: true
 format:
   html:
-    embed-resources: true
+    embed-resources: false
 ---
 
 # Introduction
@@ -65,11 +65,15 @@ Today, logarithms are usually introduced through exponents. Although Napier's or
 
 For modern readers, this idea is most easily understood through exponents. Consider the familiar law
 
-$$10^a \times 10^b = 10^{a+b}$$
+$$
+10^a \times 10^b = 10^{a+b}
+$$
 
 The equation shows that multiplication can be encoded as addition when numbers are represented through exponents. Logarithms capture this relationship through the identity
 
-$$\log(ab)=\log(a)+\log(b).$$
+$$
+\log(ab)=\log(a)+\log(b).
+$$
 
 This formula may appear routine for modern readers. In the seventeenth century, however, it offered a completely new way to think about calculation. Multiplications that once required substantial effort could now be reduced to additions, dramatically decreasing both the time required and the likelihood of error. In principle, astronomers no longer needed to multiply enormous numbers directly; they only needed to add their logarithms.
 
@@ -80,9 +84,11 @@ The logarithms introduced by Napier were quite different from the ones taught to
 
 Modern logarithms are usually defined through exponents. For example,
 
-$$10^2 = 100
+$$
+10^2 = 100
 \qquad\Longrightarrow\qquad
-\log_{10}(100)=2.$$
+\log_{10}(100)=2.
+$$
 
 Napier did not think about logarithms this way. Instead, he imagined a race between two moving particles.
 
@@ -90,11 +96,15 @@ One particle moves along a straight line at a constant speed. The other starts w
 
 If the second particle's remaining distances are
 
-$$100,\quad 90,\quad 81,\quad 72.9,\quad \cdots$$
+$$
+100,\quad 90,\quad 81,\quad 72.9,\quad \cdots
+$$
 
 then the first particle might travel
 
-$$0,\quad 1,\quad 2,\quad 3,\quad \cdots$$
+$$
+0,\quad 1,\quad 2,\quad 3,\quad \cdots
+$$
 
 units during the same time intervals.
 
@@ -314,7 +324,9 @@ To explore the question, he began with a simple example.
 
 Suppose you have one unit of currency invested, earning a highly generous 100% annual interest rate. Instead of receiving the entire 100% at the end of the year, imagine the interest is split equally among $n$ compounding periods. Each period then contributes a rate of $\frac{1}{n}$, so the account is multiplied by $1+\frac{1}{n}$ each time. After $n$ such periods, the final amount becomes
 
-$$\left(1+\frac{1}{n}\right)^n$$
+$$
+\left(1+\frac{1}{n}\right)^n
+$$
 
 As Bernoulli pushed the compounding frequency higher, a clear pattern emerged:
 
@@ -337,11 +349,15 @@ This raises a natural question:
 
 As the number of compounding periods grows without bound, the expression
 
-$$\left(1+\frac{1}{n}\right)^n$$
+$$
+\left(1+\frac{1}{n}\right)^n
+$$
 
 approaches a specific number:
 
-$$2.71828\ldots$$
+$$
+2.71828\ldots
+$$
 
 Bernoulli had uncovered something unexpected. A problem about compound interest seemed to be approaching a specific numerical limit, one that did not depend on any particular bank, currency, or investment. The result looked less like a fact about finance and more like a property of mathematics itself.
 
@@ -361,9 +377,11 @@ Yet mathematicians knew that logarithms could be constructed using many differen
 
 But there is nothing inherently special about the number 10. It is the base we use because our number system is decimal. Other bases work just as well:
 
-$$\log_2(2^3)=3,
+$$
+\log_2(2^3)=3,
 \qquad
-\log_3(3^4)=4.$$
+\log_3(3^4)=4.
+$$
 
 Napier and Briggs had built logarithms as a computational tool — a table you looked things up in. Back then, nobody was asking whether one base was more "correct" than another, because a table doesn't have a "base" in any deep sense; it's just a table. That question only became possible once mathematicians made a conceptual shift, treating logarithms not as tables to look things up in, but as *functions* that could be differentiated and integrated like any other.
 
@@ -385,15 +403,147 @@ It was while working through exponential functions in this broader context, not 
 
 To compare bases, Euler looked at how $a^x$ changes. Differentiating it produces the exponential function back again, multiplied by a leftover constant that depends on the base:
 
-$$\frac{d}{dx}a^x=\lim_{h\to 0}\frac{a^h-1}{h}\cdot a^x.$$
+$$
+\frac{d}{dx}a^x=\lim_{h\to 0}\frac{a^h-1}{h}\cdot a^x
+$$
 
 For most bases this limit is an unremarkable, forgettable number. Euler wanted to know: is there a number $a$ for which the limit simply equals 1 — a base whose exponential function is its own derivative?
 
 Working out which number satisfies this condition led straight back to an old acquaintance. The value turned out to be exactly the limit Jacob Bernoulli had run into decades earlier while compounding interest:
 
-$$e=\lim_{h\to 0}\left(1+h\right)^{\frac1h}=\lim_{n\to\infty}\left(1+\frac1n\right)^n\approx 2.71828\ldots$$
+$$
+e=\lim_{h\to 0}\left(1+h\right)^{\frac1h}=\lim_{n\to\infty}\left(1+\frac1n\right)^n\approx 2.71828\ldots
+$$
+
+The slider below shows the special property of $e^x$: its slope at any point is equal to its height at that point. The red line is the tangent line, and the blue curve is $e^x$. The slope of the tangent line is always equal to the value of the function itself.
+
+```{python}
+#| echo: false
+import numpy as np
+import plotly.graph_objects as go
+
+# fixed curve: y = e^x
+x_curve = np.linspace(-2.2, 2.2, 400)
+y_curve = np.exp(x_curve)
+
+# slider values for the point on the curve
+x0_values = np.round(np.arange(-2.0, 2.01, 0.05), 2)
+
+def tangent_line(x0, x_range):
+    y0 = np.exp(x0)
+    slope = y0  # derivative of e^x at x0 is e^x0, same as y0
+    return y0 + slope * (x_range - x0)
+
+x_tangent_range = np.linspace(-2.2, 2.2, 50)
+
+def info_annotation(x0, y0, slope):
+    return dict(
+        x=0.02,
+        y=0.95,
+        xref="paper",
+        yref="paper",
+        align="left",
+        showarrow=False,
+        bordercolor="#1d4ed8",
+        borderwidth=1.5,
+        borderpad=8,
+        bgcolor="rgba(255,255,255,0.9)",
+        font=dict(size=15),
+        text=(
+            f"x = {x0:.2f}<br>"
+            f"y = e<sup>x</sup> = {y0:.4f}<br>"
+            f"slope = {slope:.4f}<br>"
+            "<b>slope and y are always equal</b>"
+        )
+    )
+
+fig = go.Figure()
+
+# the e^x curve, fixed
+fig.add_trace(
+    go.Scatter(
+        x=x_curve,
+        y=y_curve,
+        mode="lines",
+        name="e<sup>x</sup>",
+        line=dict(width=4, color="#1d4ed8")
+    )
+)
+
+# initial tangent line
+x0_init = 0.0
+y0_init = np.exp(x0_init)
+tangent_init = tangent_line(x0_init, x_tangent_range)
+
+fig.add_trace(
+    go.Scatter(
+        x=x_tangent_range,
+        y=tangent_init,
+        mode="lines",
+        name="Tangent line",
+        line=dict(dash="dash", width=3, color="#dc2626")
+    )
+)
+
+# moving point
+fig.add_trace(
+    go.Scatter(
+        x=[x0_init],
+        y=[y0_init],
+        mode="markers",
+        name="Point on curve",
+        marker=dict(size=12, color="#dc2626")
+    )
+)
+
+steps = []
+for x0 in x0_values:
+    y0 = np.exp(x0)
+    tangent = tangent_line(x0, x_tangent_range)
+    step = dict(
+        method="update",
+        args=[
+            {"x": [x_curve, x_tangent_range, [x0]],
+             "y": [y_curve, tangent, [y0]]},
+            {"annotations": [info_annotation(x0, y0, y0)],
+             "title": "The slope of e<sup>x</sup> always equals its height"}
+        ],
+        label=f"{x0:.2f}"
+    )
+    steps.append(step)
+
+fig.update_layout(
+    title="The slope of e<sup>x</sup> always equals its height",
+    width=900,
+    height=600,
+    xaxis_title="x",
+    yaxis_title="y",
+    yaxis_range=[-1, 10],
+    annotations=[info_annotation(x0_init, y0_init, y0_init)],
+    sliders=[
+        dict(
+            active=int(np.argmin(np.abs(x0_values - x0_init))),
+            currentvalue={"prefix": "x = "},
+            pad={"t": 40},
+            steps=steps
+        )
+    ]
+)
+
+fig.show()
+```
 
 Bernoulli had been asking a question about money. Euler was asking a question about calculus. Both roads ended at the same number.
+
+## One Number, Two Faces
+
+Euler didn't stop at the limit. A limit is easy to state but slow to compute — plugging in a huge $n$ only ever gives an approximation. So Euler also worked out a second way to express the same constant, as an infinite sum:
+
+$$
+e=1+\frac1{1!}+\frac1{2!}+\frac1{3!}+\cdots
+$$
+
+This series converges quickly — a handful of terms already nails down several decimal places — which made it far more useful for actual calculation than the original limit. More importantly, Euler showed that the limit and the series were two descriptions of the very same number. Bernoulli's compound-interest problem and this new infinite sum were not just similar; they were identical.
 
 ::: {.callout-tip collapse="true"}
 ## Fun Fact: Why Is It Called $e$?
@@ -409,25 +559,19 @@ In fact, the number had been written using other symbols before Euler adopted $e
 Whatever the reason, Euler's notation survived. Three centuries later, millions of students still write the same letter.
 :::
 
-## One Number, Two Faces
-
-Euler didn't stop at the limit. A limit is easy to state but slow to compute — plugging in a huge $n$ only ever gives an approximation. So Euler also worked out a second way to express the same constant, as an infinite sum:
-
-$$e=1+\frac1{1!}+\frac1{2!}+\frac1{3!}+\cdots$$
-
-This series converges quickly — a handful of terms already nails down several decimal places — which made it far more useful for actual calculation than the original limit. More importantly, Euler showed that the limit and the series were two descriptions of the very same number. Bernoulli's compound-interest problem and this new infinite sum were not just similar; they were identical.
-
 ## The Natural Logarithm Finds Its Base
 
 There is still one loose thread from the story so far. Decades before Euler pinned down $e$, a completely different logarithm had already turned up — not from exponentials at all, but from computing an area under a curve, with no base ever attached to it. This section ties that thread off: that unbased, area-defined logarithm turns out to be Euler's $e$-based $\ln$ all along.
 
 Back in 1647, **Gregory of Saint-Vincent** had shown that the area trapped under the hyperbola $y=\frac1t$ between $t=1$ and $t=x$ behaves exactly like a logarithm: every time $x$ is *multiplied* by some factor, that area picks up the same *added* amount, no matter where you started. His student **Alphonse de Sarasa** made the connection explicit in 1649, and by 1668 Nicholas Mercator had a whole series for this area function. Mercator called it the **natural logarithm** — natural not because anyone knew which base it belonged to, but because it fell straight out of integration, with no arbitrary choice of 10, or 2, or anything else. For nearly a century, this "natural" logarithm sat there unbased: everyone agreed it behaved like a logarithm, but nobody could say a logarithm *of what*. This natural logarithm can be defined by the notation $L(x)$, and it has the following properties:
 
-$$L(x)=\int_1^x \frac{1}{t}\,dt,
+$$
+L(x)=\int_1^x \frac{1}{t}\,dt,
 \qquad
 L(1)=0,
 \qquad
-L'(x)=\frac1x.$$
+L'(x)=\frac1x.
+$$
 
 Write $A(x) = L(x) = \int_1^x \frac1t\,dt$ for this same area. The slider below shows the logarithmic behavior directly: the blue area is fixed at $A(x)$, while the red area is the extra area gained when the upper limit is multiplied by $a$ — and it always equals $A(a)$, so $A(ax) = A(x) + A(a)$.
 
@@ -615,15 +759,19 @@ Multiplying the upper limit adds area, which is why this area function behaves l
 
 Euler already had, from the work in the previous section, a candidate for exactly this job. He'd pinned down $e$ so that $\frac{d}{dx}e^x=e^x$, and writing $\ln x:=\log_e x$ for its inverse, that same condition translates directly into
 
-$$\ln 1=0, \qquad \frac{d}{dx}\ln x=
-\frac1x.$$
+$$
+\ln 1=0, \qquad \frac{d}{dx}\ln x=
+\frac1x.
+$$
 
 These are precisely the two properties that pinned down $L(x)$ back in the previous section.
 
 Two functions, same derivative, same starting value — they have to be the same function everywhere. So Mercator's area, Euler's $\ln$, and Bernoulli's compounding limit were not three related ideas. They were one number, arrived at four separate times:
 
-$$\ln x=\log_e x=
-\int_1^x\frac1t\,dt.$$
+$$
+\ln x=\log_e x=
+\int_1^x\frac1t\,dt.
+$$
 
 The natural logarithm finally had a base. It had been $e$ the entire time.
 
@@ -699,11 +847,15 @@ Imagine a colony of bacteria in a petri dish, with unlimited food and no predato
 
 This is the defining feature of exponential growth: the rate of increase is proportional to the current size. Mathematically, that idea is written as a simple differential equation:
 
-$$\frac{dP}{dt} = kP$$
+$$
+\frac{dP}{dt} = kP
+$$
 
 Here $P$ is the population and $k$ is the growth rate. Solving this equation gives:
 
-$$P(t) = P_0 \, e^{kt}$$
+$$
+P(t) = P_0 \, e^{kt}
+$$
 
 where $P_0$ is the starting population. Notice that $e$ appears not because anyone inserted it by hand, but because it is the only base for which this growth pattern works out cleanly.
 
@@ -723,11 +875,15 @@ Suppose you must choose the best candidate from a sequence of candidates. You in
 
 A classic mathematical answer says: first, reject approximately
 
-$$\frac{1}{e}$$
+$$
+\frac{1}{e}
+$$
 
 of the candidates. Since
 
-$$\frac{1}{e} \approx 0.3679$$
+$$
+\frac{1}{e} \approx 0.3679
+$$
 
 this means rejecting about $37\%$ of the candidates before making a serious choice — then settling for the very next one who beats everyone you've seen so far.
 
@@ -741,7 +897,9 @@ There is a curve that nature seems to love, and $e$ is hiding right inside its f
 
 It's called the **logarithmic spiral**, and its equation looks like this:
 
-$$r = a \cdot e^{b\theta}$$
+$$
+r = a \cdot e^{b\theta}
+$$
 
 Here, $r$ is the distance from the center, $\theta$ is the angle of rotation, and $a$ and $b$ are constants that control the size and tightness of the spiral.
 
@@ -760,7 +918,7 @@ This self-similar growth pattern shows up again and again in the natural world:
 :::
 
 ::: {.column width="60%"}
-![a spiral galaxy](BAAG_images/A-spiral-galaxy.png){width="463"}
+![a spiral galaxy](BAAG_images/A-spiral-galaxy.png){width="467"}
 :::
 :::::
 
