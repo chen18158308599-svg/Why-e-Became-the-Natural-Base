@@ -7,8 +7,8 @@ format:
     embed-resources: false
 ---
 
-:::{.callout-info}
-# Group Information
+:::{.callout-note}
+## Group Information
 
 **Group:** BAAG  
 **Authors:** CHEN CHEN, GAO SHUO, Irene Bong Sze Ting
@@ -16,6 +16,7 @@ format:
 <div style="text-align: center;">
 ![From left to right: CHEN CHEN, GAO SHUO, Irene Bong Sze Ting](BAAG_images/group_photo.jpg){width="250"}
 </div>
+
 :::
 
 # Introduction
